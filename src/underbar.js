@@ -37,7 +37,7 @@
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
-    return n === undefined ? array[array.length - 1] :  ( n > array.length ? array : array.slice(array.length - n));
+    return n === undefined ? array[array.length - 1] : ( n > array.length ? array : array.slice(array.length - n));
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -46,12 +46,12 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
-    if(Array.isArray(collection)) {
+    if (Array.isArray(collection)) {
       for (var i = 0; i < collection.length; i++) {
         iterator(collection[i], i, collection);
       }
     } else {
-      for(var key in collection) {
+      for (var key in collection) {
         iterator(collection[key], key, collection);
       }
     }
@@ -76,16 +76,56 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    var results = [];
+    _.each(collection, function(element) {
+      if (test(element)) {
+        results.push(element);
+      }
+    });
+    return results;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    var rejectValues = _.filter(collection, test);
+    var results = [];
+    _.each(collection, function(element) {
+      if (!rejectValues.includes(element)) {
+        results.push(element);
+      }
+    });
+    return results;
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+    var results = [];
+    if (!isSorted && iterator === undefined) {
+      _.each(array, function(element) {
+        if (!results.includes(element)) {
+          results.push(element);
+        }
+      });
+    } else if (isSorted && iterator) {
+      //var outcomes = _.each(array, iterator);
+      var outcomes = [];
+      for (var i = 0; i < array.length; i++) {
+        outcomes.push(iterator(array[i], i, array));
+      }
+      var tempResults = [];
+      _.each(outcomes, function(element) {
+        if (!tempResults.includes(element)) {
+          tempResults.push(element);
+        }
+      });
+      _.each(tempResults, function(element) {
+        var index = _.indexOf(outcomes, element);
+        results.push(array[index]);
+      });
+    }
+    return results;
   };
 
 
