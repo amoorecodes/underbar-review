@@ -123,7 +123,7 @@
       _.each(tempResults, function(element) {
         var index = _.indexOf(outcomes, element);
         results.push(array[index]);
-      });
+      });   
     }
     return results;
   };
@@ -180,6 +180,17 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    if (accumulator === undefined) {
+      accumulator = collection[0];
+      _.each(collection.slice(1), function(element) {
+        accumulator = iterator(accumulator, element);
+      });
+    } else {
+      _.each(collection, function(element) {
+        accumulator = iterator(accumulator, element);
+      });
+    }
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
