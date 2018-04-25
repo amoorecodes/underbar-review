@@ -210,7 +210,8 @@
   _.every = function(collection, iterator) {
     iterator = (iterator === undefined ? _.identity : iterator);
     return _.reduce(collection, function(isEvery, item) {
-      if (isEvery && !!iterator(item)) {
+      if (isEvery &&
+       !!iterator(item)) {
         return true;
       } else {
         return false;
@@ -267,11 +268,33 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var args = [];
+    for (var i = 1; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+    _.each(args, function(element) {
+      for (var key in element) {
+        obj[key] = element[key];
+      }
+    });
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var args = [];
+    for (var i = 1; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+    _.each(args, function(element) {
+      for (var key in element) {
+        if (obj[key] === undefined) {
+          obj[key] = element[key];
+        }
+      }
+    });
+    return obj;
   };
 
 
