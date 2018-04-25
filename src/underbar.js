@@ -210,10 +210,12 @@
   _.every = function(collection, iterator) {
     iterator = (iterator === undefined ? _.identity : iterator);
     return _.reduce(collection, function(isEvery, item) {
-      if (isEvery === !!iterator(item)) {
+      if (isEvery && !!iterator(item)) {
         return true;
+      } else {
+        return false;
       }
-      return isEvery === !!iterator(item);
+      //return isEvery === iterator(item);
     }, true);
     
     // TIP: Try re-using reduce() here.
@@ -232,8 +234,19 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    iterator = (iterator === undefined ? _.identity : iterator);
+    var isEvery = _.every(collection, function(element) {
+      return !iterator(element);
+    });
+    return !isEvery;
+    // var answer = false;
+    // _.each(collection, function(element) {
+    //   if (iterator(element)) {
+    //     answer = true;
+    //   }
+    // });
+    // return answer; 
   };
-
 
   /**
    * OBJECTS
